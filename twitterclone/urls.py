@@ -16,16 +16,18 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.conf.urls import include
-from tweet.views import (home, compose)
-from twitteruser.views import (signup, logout_action)
+from tweet.views import (home, compose, tweet, selected_user)
+from twitteruser.views import (signup, logout_action, follow, unfollow)
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
     path('compose/', compose, name='compose'),
-    path('tweet/<int:id>/', home, name='tweet'),
-    # path('user/<str:username>/', user_profile, name='user'),
+    path('tweet/<int:id>/', tweet, name='tweet'),
     path('logout/', logout_action, name='logout'),
     path('signup/', signup, name='signup'),
+    path('follow/', follow, name='follow'),
+    path('unfollow/', unfollow, name='unfollow'),
     path('accounts/', include('django.contrib.auth.urls')),
+    path('<str:username>/', selected_user, name='user'),
 ]
