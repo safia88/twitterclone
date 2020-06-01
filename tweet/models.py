@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 from django.conf import settings
 from django.template.defaultfilters import slugify
-
+from twitteruser.models import TwitterUser
 # Create your models here.
 
 
@@ -12,7 +12,7 @@ User = settings.AUTH_USER_MODEL
 class Tweet(models.Model):
     body = models.CharField(max_length=140)
     creation_date = models.DateTimeField(auto_now_add=True, editable=False)
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(TwitterUser, on_delete=models.CASCADE)
 
     class Meta:
         ordering = ("-creation_date",)
@@ -22,7 +22,8 @@ class Tweet(models.Model):
 
     def parse_mentions(self):
         mentions = [slugify(i) for i in self.body.split() if i.startswith("@")]
-        return User.objects.filter(username__in=mentions)
+        print(mentions)
+        return TwitterUser.objects.filter(username__in=mentions)
 
     def parse_all(self):
         parts = self.body.split()
